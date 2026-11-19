@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход — Учёт расходов</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="auth-body">
+    <main class="auth-card">
+        <img src="/img/spongebob-pic.png" alt="Персонаж" onerror="this.style.display='none'">
+        <div class="auth-form-side">
+            <h1 class="auth-title">Рады видеть вас снова!</h1>
+            <div id="auth-error" class="alert alert-error hidden"></div>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="username">Логин</label>
+                    <input type="text" id="username" placeholder="Введите логин" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Пароль</label>
+                    <input type="password" id="password" placeholder="Введите пароль" required>
+                </div>
+                <button type="submit" class="btn-primary auth-btn">Войти</button>
+            </form>
+            <p class="auth-switch">Впервые здесь? <a href="/register.html">Зарегистрироваться</a></p>
+        </div>
+    </main>
+    <script src="/js/api.js"></script>
+    <script src="/js/auth.js"></script>
+</body>
+</html>

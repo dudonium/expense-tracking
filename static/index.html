@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Обзор — Учёт расходов</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="top-header">
+            <div class="header-left">
+                <div class="user-pill">
+                    <div class="avatar-circle">
+                        <img src="/img/avatar.png" alt="" onerror="this.style.display='none'">
+                    </div>
+                    <span id="user-name" class="user-name">Загрузка...</span>
+                    <button id="logout-btn" class="btn-primary btn-sm">Выйти</button>
+                </div>
+                <div class="page-heading">
+                    <h1>ОБЗОР</h1>
+                    <p id="current-period-label" class="subtitle">Все время</p>
+                </div>
+            </div>
+
+            <div class="balance-box">
+                <span class="balance-label">Текущий баланс</span>
+                <div class="balance-value">
+                    <span class="ruble-badge">₽</span>
+                    <span id="stat-balance">0.00</span>
+                </div>
+            </div>
+        </header>
+
+        <div id="global-alert" class="alert alert-error hidden"></div>
+
+        <main class="dashboard-grid">
+            <section class="card chart-card">
+                <h2>Расходы по категориям</h2>
+                <div id="chart-container" class="chart-wrapper">
+                    <div class="state-msg">Загрузка статистики...</div>
+                </div>
+            </section>
+
+            <section class="card categories-card">
+                <h2>Управление категориями</h2>
+                <form id="category-form" class="category-add-form">
+                    <input type="text" id="new-category-name" placeholder="Новая категория" required maxlength="50">
+                    <button type="submit" class="btn-primary">Добавить</button>
+                </form>
+                <div id="categories-list" class="category-chips"></div>
+            </section>
+
+            <div class="summary-stack">
+                <section class="card mini-stat-card">
+                    <span class="stat-title income-text">Доход</span>
+                    <div class="stat-row">
+                        <div class="stat-num">
+                            <span class="ruble-badge">₽</span>
+                            <span id="stat-income">0.00</span>
+                        </div>
+                        <span class="arrow-up">↑</span>
+                    </div>
+                </section>
+
+                <section class="card mini-stat-card">
+                    <span class="stat-title expense-text">Расход</span>
+                    <div class="stat-row">
+                        <div class="stat-num">
+                            <span class="ruble-badge">₽</span>
+                            <span id="stat-expense">0.00</span>
+                        </div>
+                        <span class="arrow-down">↓</span>
+                    </div>
+                </section>
+            </div>
+
+            <section class="card add-expense-card">
+                <div class="card-header-row">
+                    <h2 id="form-title">Добавление расхода</h2>
+                    <button type="button" id="cancel-edit-btn" class="btn-link hidden">Отмена</button>
+                </div>
+                <form id="expense-form" class="expense-form">
+                    <input type="hidden" id="edit-expense-id">
+                    <div class="type-toggle">
+                        <label class="radio-pill">
+                            <input type="radio" name="op_type" value="expense" checked>
+                            <span>Расход</span>
+                        </label>
+                        <label class="radio-pill">
+                            <input type="radio" name="op_type" value="income">
+                            <span>Доход</span>
+                        </label>
+                    </div>
+                    <div class="form-row-2">
+                        <input type="text" id="exp-title" placeholder="Название" required maxlength="100">
+                        <input type="number" id="exp-amount" placeholder="Сумма" step="0.01" min="0.01" required>
+                    </div>
+                    <div class="form-row-2">
+                        <input type="date" id="exp-date" required>
+                        <select id="exp-category">
+                            <option value="">Без категории</option>
+                        </select>
+                    </div>
+                    <input type="text" id="exp-comment" placeholder="Комментарий..." maxlength="500">
+                    <button type="submit" id="exp-submit-btn" class="btn-primary">Добавить</button>
+                </form>
+            </section>
+
+            <section class="card expenses-list-card">
+                <div class="list-header">
+                    <h2>Последние операции</h2>
+                    <select id="sort-select" class="sort-select" aria-label="Сортировка">
+                        <option value="date_desc">Сначала новые</option>
+                        <option value="date_asc">Сначала старые</option>
+                        <option value="amount_desc">По сумме ↓</option>
+                        <option value="amount_asc">По сумме ↑</option>
+                    </select>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="expenses-table">
+                        <thead>
+                            <tr>
+                                <th>Дата</th>
+                                <th>Название</th>
+                                <th>Категория</th>
+                                <th>Сумма</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="expenses-tbody"></tbody>
+                    </table>
+                </div>
+                <div id="list-state" class="state-msg">Загрузка операций...</div>
+                <button id="load-more-btn" class="btn-secondary hidden">Показать ещё</button>
+            </section>
+
+            <section class="card filters-card">
+                <h2>Фильтры</h2>
+                <form id="filter-form" class="filter-form">
+                    <input type="text" id="filter-search" placeholder="Поиск по названию...">
+                    <select id="filter-category">
+                        <option value="">Все категории</option>
+                    </select>
+                    <label class="filter-label">Диапазон дат</label>
+                    <div class="form-row-2">
+                        <input type="date" id="filter-from" title="От">
+                        <input type="date" id="filter-to" title="До">
+                    </div>
+                    <button type="submit" class="btn-primary">Посмотреть</button>
+                    <button type="button" id="reset-filters-btn" class="btn-link">Сбросить фильтры</button>
+                </form>
+            </section>
+        </main>
+    </div>
+
+    <script src="/js/api.js"></script>
+    <script src="/js/app.js"></script>
+</body>
+</html>
